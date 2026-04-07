@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prathamesh Lande</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0a0a0a;
+  --paper:#f5f2ed;
+  --warm:#ede8e0;
+  --gold:#b89a5a;
+  --gold-light:#d4b87a;
+  --blue:#1a3a5c;
+  --mid:#2c5f8a;
+  --steel:#4a7fa8;
+  --muted:#7a7065;
+  --faint:#c8c0b4;
+  --white:#ffffff;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Syne',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--ink);color:var(--paper);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(184,154,90,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:normal}
+.nav-logo{font-family:var(--serif);font-size:1.1rem;font-weight:300;color:var(--paper);text-decoration:none;letter-spacing:0.05em}
+.nav-links{display:flex;gap:3rem;list-style:none}
+.nav-links a{font-size:0.7rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--faint);text-decoration:none;transition:color 0.3s}
+.nav-links a:hover{color:var(--gold)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-rows:1fr auto;padding:8rem 4rem 4rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 80% 60% at 70% 40%, rgba(26,58,92,0.35) 0%, transparent 70%);pointer-events:none}
+.hero-line{position:absolute;top:0;right:28%;width:1px;height:100%;background:linear-gradient(to bottom, transparent, rgba(184,154,90,0.2) 30%, rgba(184,154,90,0.2) 70%, transparent);pointer-events:none}
+
+.hero-content{display:grid;grid-template-columns:1fr 380px;gap:4rem;align-items:end}
+.hero-eyebrow{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;opacity:0;animation:fadeUp 0.8s 0.2s forwards}
+.hero-name{font-family:var(--serif);font-size:clamp(4rem,8vw,8rem);font-weight:300;line-height:0.95;color:var(--paper);margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s 0.35s forwards}
+.hero-name em{font-style:italic;color:var(--gold-light)}
+.hero-desc{font-size:0.88rem;line-height:1.9;color:var(--faint);max-width:420px;margin-bottom:3rem;opacity:0;animation:fadeUp 0.8s 0.5s forwards}
+.hero-cta{display:flex;gap:1.5rem;opacity:0;animation:fadeUp 0.8s 0.65s forwards}
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.8rem 2rem;font-family:var(--sans);font-size:0.7rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;transition:all 0.3s;border:none;cursor:none}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-ghost{border:1px solid rgba(184,154,90,0.3);color:var(--gold)}
+.btn-ghost:hover{border-color:var(--gold);background:rgba(184,154,90,0.06)}
+
+.hero-stats{display:flex;flex-direction:column;gap:0;opacity:0;animation:fadeIn 1s 0.7s forwards;border-left:1px solid rgba(184,154,90,0.2);padding-left:2.5rem}
+.stat{padding:1.5rem 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.stat:last-child{border-bottom:none}
+.stat-n{font-family:var(--serif);font-size:2.8rem;font-weight:300;color:var(--gold-light);line-height:1}
+.stat-l{font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin-top:0.4rem}
+
+.hero-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:3rem;border-top:1px solid rgba(255,255,255,0.07);opacity:0;animation:fadeIn 0.8s 0.9s forwards}
+.hero-location{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint)}
+.hero-scroll{display:flex;align-items:center;gap:0.75rem;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--faint)}
+.scroll-line{width:40px;height:1px;background:var(--gold);display:inline-block}
+
+/* SECTIONS */
+.section{padding:7rem 4rem;border-top:1px solid rgba(255,255,255,0.07)}
+.s-label{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
+.s-label::before{content:'';display:inline-block;width:24px;height:1px;background:var(--gold)}
+.s-title{font-family:var(--serif);font-size:clamp(2.4rem,4vw,3.8rem);font-weight:300;line-height:1.1;color:var(--paper);margin-bottom:4rem}
+.s-title em{font-style:italic;color:var(--gold-light)}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
+.about-body{font-size:1rem;line-height:1.95;color:var(--faint)}
+.about-body p+p{margin-top:1.4rem}
+.about-body strong{color:var(--paper);font-weight:500}
+.about-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:2rem}
+.a-tag{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.45rem 1rem;border:1px solid rgba(184,154,90,0.25);color:var(--gold);transition:all 0.25s}
+.a-tag:hover{background:rgba(184,154,90,0.08);border-color:var(--gold)}
+.about-facts{display:flex;flex-direction:column;gap:0}
+.fact{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1.2rem 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.fact:last-child{border-bottom:none}
+.fact-k{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding-top:0.1rem}
+.fact-v{font-size:0.9rem;color:var(--paper);font-weight:400}
+.fact-v a{color:var(--gold);text-decoration:none}
+
+/* EXPERIENCE */
+.exp-item{display:grid;grid-template-columns:200px 1fr;gap:4rem;padding:3rem 0;border-bottom:1px solid rgba(255,255,255,0.06);opacity:0;transform:translateY(24px);transition:all 0.6s}
+.exp-item.vis{opacity:1;transform:none}
+.exp-item:last-child{border-bottom:none}
+.exp-meta{padding-top:0.3rem}
+.exp-period{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem}
+.exp-loc{font-size:0.8rem;color:var(--muted)}
+.exp-role{font-family:var(--serif);font-size:1.6rem;font-weight:300;color:var(--paper);line-height:1.2;margin-bottom:0.4rem}
+.exp-co{font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--steel);margin-bottom:1.5rem}
+.exp-bullets{list-style:none;display:flex;flex-direction:column;gap:0.8rem}
+.exp-bullets li{font-size:0.87rem;line-height:1.75;color:var(--faint);display:flex;gap:1rem}
+.exp-bullets li::before{content:'·';color:var(--gold);flex-shrink:0;font-size:1.2rem;line-height:1.4}
+
+/* PROJECTS */
+.projects{background:var(--ink)}
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.proj-card{background:rgba(255,255,255,0.025);padding:2.5rem;border:1px solid rgba(255,255,255,0.05);transition:background 0.3s;opacity:0;transform:translateY(20px);transition:opacity 0.5s,transform 0.5s,background 0.3s}
+.proj-card.vis{opacity:1;transform:none}
+.proj-card:hover{background:rgba(184,154,90,0.04)}
+.proj-card.feat{grid-column:span 2;background:rgba(26,58,92,0.3);border-color:rgba(184,154,90,0.15)}
+.proj-badge{font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.6rem}
+.proj-badge::before{content:'';width:16px;height:1px;background:var(--gold);display:inline-block}
+.proj-title{font-family:var(--serif);font-size:1.6rem;font-weight:300;color:var(--paper);margin-bottom:1rem;line-height:1.2}
+.proj-metric-row{display:flex;gap:2.5rem;margin-bottom:1.5rem}
+.proj-metric-n{font-family:var(--serif);font-size:2.2rem;font-weight:300;color:var(--gold-light);line-height:1}
+.proj-metric-l{font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:0.3rem}
+.proj-desc{font-size:0.85rem;line-height:1.8;color:var(--faint);margin-bottom:1.5rem}
+.proj-stack{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.5rem}
+.s-tag{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.3rem 0.7rem;border:1px solid rgba(255,255,255,0.1);color:var(--muted)}
+.proj-links{display:flex;gap:1.5rem}
+.proj-link{font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;transition:opacity 0.2s;display:flex;align-items:center;gap:0.5rem}
+.proj-link:hover{opacity:0.65}
+.proj-link::after{content:'↗';font-size:0.8rem}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.skill-block{padding:2rem;border:1px solid rgba(255,255,255,0.05);opacity:0;transform:translateY(16px);transition:all 0.5s}
+.skill-block.vis{opacity:1;transform:none}
+.skill-cat{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+.skill-items{display:flex;flex-wrap:wrap;gap:0.5rem}
+.sk-item{font-size:0.78rem;color:var(--faint);padding:0.3rem 0.7rem;border:1px solid rgba(255,255,255,0.07)}
+
+/* EDUCATION */
+.edu-list{display:flex;flex-direction:column;gap:0}
+.edu-item{display:grid;grid-template-columns:200px 1fr auto;gap:3rem;padding:2.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06);opacity:0;transform:translateY(16px);transition:all 0.5s;align-items:start}
+.edu-item.vis{opacity:1;transform:none}
+.edu-item:last-child{border-bottom:none}
+.edu-period{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);padding-top:0.3rem}
+.edu-deg{font-family:var(--serif);font-size:1.3rem;font-weight:300;color:var(--paper);margin-bottom:0.3rem}
+.edu-school{font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--steel);margin-bottom:0.75rem}
+.edu-courses{font-size:0.8rem;line-height:1.7;color:var(--muted)}
+
+/* CONTACT */
+.contact{text-align:center;padding:8rem 4rem;background:radial-gradient(ellipse 60% 50% at 50% 100%, rgba(26,58,92,0.4) 0%, transparent 70%)}
+.contact-email{font-family:var(--serif);font-size:clamp(2rem,5vw,4rem);font-weight:300;color:var(--paper);text-decoration:none;display:inline-block;border-bottom:1px solid rgba(184,154,90,0.3);margin-bottom:3rem;transition:color 0.3s}
+.contact-email:hover{color:var(--gold-light)}
+.contact-links{display:flex;justify-content:center;gap:2.5rem}
+.c-link{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--faint);text-decoration:none;transition:color 0.3s}
+.c-link:hover{color:var(--gold)}
+
+footer{padding:2rem 4rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center}
+.foot-l{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+.foot-r{font-family:var(--serif);font-size:0.9rem;color:var(--muted)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+@media(max-width:900px){
+  nav{padding:1.5rem}
+  .nav-links{display:none}
+  .hero{padding:7rem 1.5rem 3rem}
+  .hero-content{grid-template-columns:1fr}
+  .hero-stats{display:none}
+  .section{padding:4rem 1.5rem}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .exp-item{grid-template-columns:1fr;gap:0.5rem}
+  .proj-grid{grid-template-columns:1fr}
+  .proj-card.feat{grid-column:span 1}
+  .skills-grid{grid-template-columns:1fr 1fr}
+  .edu-item{grid-template-columns:1fr;gap:0.5rem}
+  footer{flex-direction:column;gap:0.5rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav>
+  <a href="#" class="nav-logo">Prathamesh Lande</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Work</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow">Healthcare Analytics · Pharma Strategy · UC Irvine 2026</div>
+      <h1 class="hero-name">Prathamesh<br><em>Lande</em></h1>
+      <p class="hero-desc">Business Analyst bridging pharmaceutical domain expertise with advanced data analytics. Dual-degree background in Pharmacy and MBA, now completing MS Business Analytics at UC Irvine.</p>
+      <div class="hero-cta">
+        <a href="mailto:landep@uci.edu" class="btn btn-gold">Get in touch</a>
+        <a href="https://linkedin.com/in/prathamesh-lande" class="btn btn-ghost" target="_blank">LinkedIn</a>
+        <a href="https://github.com/PrathameshLande" class="btn btn-ghost" target="_blank">GitHub</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">$2B+</div><div class="stat-l">Market sized for medtech device</div></div>
+      <div class="stat"><div class="stat-n">70K+</div><div class="stat-l">Molecules cleansed, IQVIA</div></div>
+      <div class="stat"><div class="stat-n">0.82</div><div class="stat-l">ROC-AUC, diabetes ML model</div></div>
+      <div class="stat"><div class="stat-n">25%</div><div class="stat-l">Accuracy improvement, pharma data</div></div>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <span class="hero-location">Irvine, California</span>
+    <span class="hero-scroll"><span class="scroll-line"></span>Scroll to explore</span>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="s-label">About</div>
+  <h2 class="s-title">Pharma domain meets<br><em>modern analytics</em></h2>
+  <div class="about-grid">
+    <div>
+      <div class="about-body">
+        <p>I hold a dual degree — <strong>B.Pharm + MBA from NMIMS University</strong> — and I'm completing an <strong>MS in Business Analytics at UC Irvine's Paul Merage School of Business</strong>. This combination is rare: deep pharmaceutical domain knowledge paired with modern ML and analytics skills.</p>
+        <p>I've worked across the full pharma commercial spectrum — from regulatory workflows and IQVIA dataset analysis at Blueberry Pharma Advisory, to go-to-market strategy for a medtech startup at Veriskin, to CRM and sales analytics for Obagi Medical's commercial team.</p>
+        <p>My work is grounded in a belief that the best healthcare decisions come from combining clinical understanding with rigorous data — not one or the other.</p>
+      </div>
+      <div class="about-tags">
+        <span class="a-tag">Healthcare Analytics</span>
+        <span class="a-tag">Market Access</span>
+        <span class="a-tag">KOL Mapping</span>
+        <span class="a-tag">CRM Analytics</span>
+        <span class="a-tag">GTM Strategy</span>
+        <span class="a-tag">Regulatory Affairs</span>
+        <span class="a-tag">ML Modelling</span>
+        <span class="a-tag">Power BI</span>
+        <span class="a-tag">Tableau</span>
+      </div>
+    </div>
+    <div class="about-facts">
+      <div class="fact"><span class="fact-k">Location</span><span class="fact-v">Irvine, CA</span></div>
+      <div class="fact"><span class="fact-k">Program</span><span class="fact-v">MS Business Analytics, UCI</span></div>
+      <div class="fact"><span class="fact-k">Graduation</span><span class="fact-v">June 2026</span></div>
+      <div class="fact"><span class="fact-k">Prior degrees</span><span class="fact-v">B.Pharm + MBA, NMIMS</span></div>
+      <div class="fact"><span class="fact-k">Seeking</span><span class="fact-v">Healthcare BA / Analytics roles</span></div>
+      <div class="fact"><span class="fact-k">Email</span><span class="fact-v"><a href="mailto:landep@uci.edu">landep@uci.edu</a></span></div>
+      <div class="fact"><span class="fact-k">Phone</span><span class="fact-v">949-659-8408</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="experience">
+  <div class="s-label">Experience</div>
+  <h2 class="s-title">Where I've <em>worked</em></h2>
+
+  <div class="exp-item">
+    <div class="exp-meta">
+      <div class="exp-period">Jan 2026 – Present</div>
+      <div class="exp-loc">Irvine, CA</div>
+    </div>
+    <div>
+      <div class="exp-role">Student Business Analyst & Project Lead</div>
+      <div class="exp-co">Obagi Medical · MSBA Capstone</div>
+      <ul class="exp-bullets">
+        <li>Analyze sales rep activity data for 70+ rep commercial team; assess CRM utilization, time-in-field ratios, and performance outcomes across territories.</li>
+        <li>Integrate CRM, sales, and market data; build predictive models identifying key drivers of rep productivity while controlling for tenure and territory factors.</li>
+        <li>Deliver actionable recommendations to sales operations leadership, informing coaching strategy and resource allocation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-meta">
+      <div class="exp-period">Jan 2026 – Mar 2026</div>
+      <div class="exp-loc">Irvine, CA</div>
+    </div>
+    <div>
+      <div class="exp-role">Student Consultant & Communication Lead</div>
+      <div class="exp-co">Veriskin</div>
+      <ul class="exp-bullets">
+        <li>Led pre-FDA approval market access strategy for TruScore AI skin cancer diagnostic device within a $2B+ market, analyzing regulatory barriers and KOL mapping across dermatology and oncology.</li>
+        <li>Designed targeted conference engagement and digital outreach strategy to build brand credibility ahead of regulatory clearance.</li>
+        <li>Served as Communication Lead and executive liaison to the Chief Development Officer, translating team findings into structured deliverables for leadership decision-making.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-meta">
+      <div class="exp-period">Jun 2024 – Sep 2024</div>
+      <div class="exp-loc">Mumbai, India</div>
+    </div>
+    <div>
+      <div class="exp-role">Business Analyst Intern</div>
+      <div class="exp-co">Blueberry Pharma Advisory</div>
+      <ul class="exp-bullets">
+        <li>Cleansed 70,000+ molecule IQVIA dataset; resolved 1,000+ ambiguous entries, reduced redundancy 15%, improved accuracy 25% using Power Query and FDA Orange Book.</li>
+        <li>Streamlined NDA/ANDA tracking workflows with patent and exclusivity data, boosting process efficiency by 20%.</li>
+        <li>Built Power BI dashboards for oncology and diabetes market research, enabling data-driven decisions for internal stakeholders.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-meta">
+      <div class="exp-period">Jun 2023 – Jul 2023</div>
+      <div class="exp-loc">Mumbai, India</div>
+    </div>
+    <div>
+      <div class="exp-role">Analytical & Development Intern</div>
+      <div class="exp-co">CIPLA Ltd</div>
+      <ul class="exp-bullets">
+        <li>Performed quality compliance testing and analytical validation for critical formulations (Amphotericin B, Semaglutide Tablets) under GMP and USP standards.</li>
+        <li>Collaborated cross-functionally with R&D and manufacturing in oncology and inhaler divisions; gained end-to-end exposure to pharmaceutical product lifecycle.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="projects">
+  <div class="s-label">Projects</div>
+  <h2 class="s-title">Selected <em>work</em></h2>
+  <div class="proj-grid">
+
+    <div class="proj-card feat">
+      <div class="proj-badge">Featured · Commercial Analytics</div>
+      <div class="proj-title">GLP-1 Prescriber Commercial Intelligence</div>
+      <div class="proj-metric-row">
+        <div><div class="proj-metric-n">6</div><div class="proj-metric-l">Tier-1 targets identified</div></div>
+        <div><div class="proj-metric-n">55%</div><div class="proj-metric-l">Semaglutide market share</div></div>
+        <div><div class="proj-metric-n">2022</div><div class="proj-metric-l">CMS Medicare dataset</div></div>
+      </div>
+      <p class="proj-desc">Analyzed CMS Medicare Part D data to identify prescriber white spaces and untapped commercial opportunity for GLP-1 drugs (Ozempic, Mounjaro, Trulicity). Built an end-to-end data pipeline in Python, applied SQL-based HCP segmentation to tier prescribers by value, and delivered findings via an interactive Tableau dashboard replicating real pharma sales analytics workflows. Key finding: Family Practice physicians drive the majority of GLP-1 volume — not Endocrinologists.</p>
+      <div class="proj-stack">
+        <span class="s-tag">Python</span><span class="s-tag">SQL</span><span class="s-tag">Tableau</span><span class="s-tag">CMS Data</span><span class="s-tag">HCP Segmentation</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/PrathameshLande/glp1-prescriber-whitespace-analysis" class="proj-link" target="_blank">GitHub</a>
+        <a href="https://public.tableau.com/app/profile/prathamesh.lande/viz/GLP1-Prescriber-Commercial-Intelligence-Dashboard/GLP-1CommercialIntelligenceDashboard_" class="proj-link" target="_blank">Live Dashboard</a>
+      </div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-badge">Machine Learning · Healthcare</div>
+      <div class="proj-title">Diabetes Risk Prediction</div>
+      <div class="proj-metric-row">
+        <div><div class="proj-metric-n">0.82</div><div class="proj-metric-l">ROC-AUC</div></div>
+        <div><div class="proj-metric-n">70K+</div><div class="proj-metric-l">BRFSS records</div></div>
+      </div>
+      <p class="proj-desc">Built and evaluated Logistic Regression and Random Forest classifiers for early diabetes screening. Applied threshold tuning to maximize recall and minimize false negatives. SHAP-based feature importance identified BMI, age, and blood pressure as dominant risk predictors.</p>
+      <div class="proj-stack">
+        <span class="s-tag">Python</span><span class="s-tag">scikit-learn</span><span class="s-tag">SHAP</span><span class="s-tag">BRFSS</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/PrathameshLande/diabetes-risk-prediction" class="proj-link" target="_blank">GitHub</a>
+      </div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-badge">Forecasting · Pharma</div>
+      <div class="proj-title">Pharma Revenue Forecasting & Pricing Analytics</div>
+      <p class="proj-desc">Analyzed Medicare Part D drug spending data to forecast 12-month revenue trajectories and model price elasticity. Built XGBoost, LightGBM, and Prophet models; segmented drug portfolio into market archetypes via K-Means. SHAP outputs translated into actionable pricing recommendations.</p>
+      <div class="proj-stack">
+        <span class="s-tag">Python</span><span class="s-tag">XGBoost</span><span class="s-tag">Prophet</span><span class="s-tag">K-Means</span><span class="s-tag">SHAP</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="skills">
+  <div class="s-label">Skills</div>
+  <h2 class="s-title">Tools & <em>capabilities</em></h2>
+  <div class="skills-grid">
+    <div class="skill-block">
+      <div class="skill-cat">Programming & Query</div>
+      <div class="skill-items">
+        <span class="sk-item">Python</span><span class="sk-item">pandas</span><span class="sk-item">scikit-learn</span><span class="sk-item">SQL</span><span class="sk-item">MySQL</span><span class="sk-item">PostgreSQL</span><span class="sk-item">R</span>
+      </div>
+    </div>
+    <div class="skill-block">
+      <div class="skill-cat">Analytics & BI</div>
+      <div class="skill-items">
+        <span class="sk-item">Tableau</span><span class="sk-item">Power BI</span><span class="sk-item">Alteryx</span><span class="sk-item">Excel</span><span class="sk-item">Power Query</span><span class="sk-item">VLOOKUP</span>
+      </div>
+    </div>
+    <div class="skill-block">
+      <div class="skill-cat">Data Platforms</div>
+      <div class="skill-items">
+        <span class="sk-item">Databricks</span><span class="sk-item">Snowflake</span><span class="sk-item">AWS</span><span class="sk-item">Google Analytics</span><span class="sk-item">Git</span>
+      </div>
+    </div>
+    <div class="skill-block">
+      <div class="skill-cat">Healthcare Domain</div>
+      <div class="skill-items">
+        <span class="sk-item">FDA Orange Book</span><span class="sk-item">NDA/ANDA</span><span class="sk-item">GMP Compliance</span><span class="sk-item">IQVIA Datasets</span><span class="sk-item">Medical Device GTM</span><span class="sk-item">Pharmacovigilance</span>
+      </div>
+    </div>
+    <div class="skill-block">
+      <div class="skill-cat">Core Competencies</div>
+      <div class="skill-items">
+        <span class="sk-item">Stakeholder Reporting</span><span class="sk-item">Requirements Gathering</span><span class="sk-item">KPI Development</span><span class="sk-item">Market Access</span><span class="sk-item">KOL Mapping</span>
+      </div>
+    </div>
+    <div class="skill-block">
+      <div class="skill-cat">Education</div>
+      <div class="skill-items">
+        <span class="sk-item">MS Business Analytics</span><span class="sk-item">UCI 2026</span><span class="sk-item">MBA</span><span class="sk-item">B.Pharm</span><span class="sk-item">NMIMS 2025</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="education">
+  <div class="s-label">Education</div>
+  <h2 class="s-title">Academic <em>background</em></h2>
+  <div class="edu-list">
+    <div class="edu-item">
+      <div class="edu-period">Aug 2025 – Jun 2026</div>
+      <div>
+        <div class="edu-deg">MS in Business Analytics</div>
+        <div class="edu-school">UC Irvine · Paul Merage School of Business</div>
+        <div class="edu-courses">Machine Learning Analytics, Science of Forecast Modelling, Tech & Analytics Consulting, Business Consulting, Big Data Management, Marketing Analytics</div>
+      </div>
+      <div></div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-period">Aug 2020 – Jun 2025</div>
+      <div>
+        <div class="edu-deg">Master of Business Administration</div>
+        <div class="edu-school">NMIMS University · Mumbai, India</div>
+        <div class="edu-courses">Pharma Supply Chain, Sales Management, Marketing Research Methodology, Brand & Product Management, Operations Management & Strategy</div>
+      </div>
+      <div></div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-period">Aug 2020 – Jun 2025</div>
+      <div>
+        <div class="edu-deg">Bachelor of Pharmacy</div>
+        <div class="edu-school">NMIMS University · Mumbai, India</div>
+        <div class="edu-courses">Pharmaceutical Regulatory Science, Pharmacovigilance, Health Insurance & Hospital Management, Biostatistics & Research Methodology, Marketing of Medical Devices</div>
+      </div>
+      <div></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="s-label" style="justify-content:center;margin-bottom:2rem">Contact</div>
+  <div style="margin-bottom:1rem;font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;color:var(--faint)">Open to opportunities</div>
+  <a href="mailto:landep@uci.edu" class="contact-email">landep@uci.edu</a>
+  <div class="contact-links">
+    <a href="https://linkedin.com/in/prathamesh-lande" class="c-link" target="_blank">LinkedIn</a>
+    <a href="https://github.com/PrathameshLande" class="c-link" target="_blank">GitHub</a>
+    <a href="tel:9496598408" class="c-link">949-659-8408</a>
+  </div>
+</section>
+
+<footer>
+  <span class="foot-l">© 2026 Prathamesh Lande</span>
+  <span class="foot-r">prathameshlande.github.io</span>
+</footer>
+
+<script>
+const cur = document.getElementById('cur');
+const ring = document.getElementById('ring');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 80);
+});
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('vis'), i * 100);
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.exp-item,.proj-card,.skill-block,.edu-item').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
